@@ -19,6 +19,8 @@ export default function AppRoutes() {
     <Routes>
       <Route element={<RootLayout />}>
         <Route path="/" element={<Home />} />
+        {/* redirect the rest to home */}
+        <Route path="*" element={<Home />} />
         {/* <Route
           path="/contact"
           element={<ContactUs />}
