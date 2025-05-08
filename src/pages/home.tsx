@@ -1,19 +1,14 @@
-import AboutUs from "@/components/home/aboutus";
-import Hero from "@/components/home/hero";
-import SeriesOfEvents from "@/components/home/series-of-events/series-of-events";
-import OurMediaPartners from "@/components/collab/mediapartners";
-import OurSponsors from "@/components/collab/sponsors";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  return (
-    <main className="flex flex-col overflow-x-hidden">
-      <Hero />
-      <AboutUs />
-      <SeriesOfEvents />
-      <OurSponsors />
-      <OurMediaPartners variant="home" />
-    </main>
-  );
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    navigate("/registration/Presale", { replace: true });
+  }, [navigate]);
+
+  return null;
 };
 
 export default Home;
