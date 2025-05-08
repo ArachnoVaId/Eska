@@ -1,14 +1,7 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import EventRegistration from "./registration/event-registration";
 
 const Home = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    navigate("/registration/Presale", { replace: true });
-  }, [navigate]);
-
-  return null;
+  return <EventRegistration />;
 };
 
 export default Home;
