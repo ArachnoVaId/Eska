@@ -27,8 +27,8 @@ import { Button } from "@/components/ui/button";
 
 import FileInput from "@/components/izcyforms/file-input";
 import { api } from "@/lib/axiosSetup";
-import { PendingTransactionResponseItem } from "@/types/midtrans";
-import { cancelPayment, initiatePayment } from "@/lib/midtransSetup";
+// import { PendingTransactionResponseItem } from "@/types/midtrans";
+// import { cancelPayment, initiatePayment } from "@/lib/midtransSetup";
 import RegistrationCard from "../registration/card";
 import Background from "../background";
 
@@ -76,10 +76,10 @@ const IzcyForms = ({
   const [isLoading, setIsLoading] = useState(false);
 
   // Midtrans
-  const [pendingTransactions, setPendingTransactions] = useState<
-    PendingTransactionResponseItem[]
-  >([]);
-  const [snapInitialized, setSnapInitialized] = useState(false);
+  // const [pendingTransactions, setPendingTransactions] = useState<
+  //   PendingTransactionResponseItem[]
+  // >([]);
+  // const [snapInitialized, setSnapInitialized] = useState(false);
 
   // Initializer
   useEffect(() => {
@@ -108,66 +108,68 @@ const IzcyForms = ({
         }
       })();
 
-      const paymentPromise = (async () => {
-        try {
-          const res = await api.get("/api/midtrans/get-client");
-          const clientKey = res.data.client_key;
-          if (!clientKey) {
-            toast.error("Payment not activated");
-            return;
-          }
-          if (!window.snap) {
-            const script = document.createElement("script");
-            script.src =
-              import.meta.env.VITE_MIDTRANS_IS_PRODUCTION === "true"
-                ? "https://app.midtrans.com/snap/snap.js"
-                : "https://app.sandbox.midtrans.com/snap/snap.js";
-            script.setAttribute("data-client-key", clientKey);
-            script.onload = () => setSnapInitialized(true);
-            script.onerror = () => toast.error("Snap load failed");
-            document.head.appendChild(script);
-          } else {
-            setSnapInitialized(true);
-          }
+      // const paymentPromise = (async () => {
+      //   try {
+      //     const res = await api.get("/api/midtrans/get-client");
+      //     const clientKey = res.data.client_key;
+      //     if (!clientKey) {
+      //       toast.error("Payment not activated");
+      //       return;
+      //     }
+      //     if (!window.snap) {
+      //       const script = document.createElement("script");
+      //       script.src =
+      //         import.meta.env.VITE_MIDTRANS_IS_PRODUCTION === "true"
+      //           ? "https://app.midtrans.com/snap/snap.js"
+      //           : "https://app.sandbox.midtrans.com/snap/snap.js";
+      //       script.setAttribute("data-client-key", clientKey);
+      //       script.onload = () => setSnapInitialized(true);
+      //       script.onerror = () => toast.error("Snap load failed");
+      //       document.head.appendChild(script);
+      //     } else {
+      //       setSnapInitialized(true);
+      //     }
 
-          toast.success("Payment system loaded successfully");
-        } catch (error) {
-          if (axios.isAxiosError(error)) {
-            toast.error("Payment system error: " + error.message);
-          } else {
-            toast.error("Payment system error");
-          }
-          isError = true;
-        }
-      })();
+      //     toast.success("Payment system loaded successfully");
+      //   } catch (error) {
+      //     if (axios.isAxiosError(error)) {
+      //       toast.error("Payment system error: " + error.message);
+      //     } else {
+      //       toast.error("Payment system error");
+      //     }
+      //     isError = true;
+      //   }
+      // })();
 
-      const pendingPromise = (async () => {
-        try {
-          const res = await api.get("/api/midtrans/pending", {
-            params: { _: Date.now() },
-          });
-          const data = res.data;
-          if (data.success) {
-            setPendingTransactions(data.pendingTransactions);
-            if (data.pendingTransactions.length > 0) {
-              toast.success(
-                `Found ${data.pendingTransactions.length} pending transaction(s).`,
-              );
-            } else {
-              toast.success("No pending transactions.");
-            }
-          } else throw new Error();
-        } catch (error) {
-          if (axios.isAxiosError(error)) {
-            toast.error("Pending transactions error: " + error.message);
-          } else {
-            toast.error("Pending transactions error");
-          }
-          isError = true;
-        }
-      })();
+      // const pendingPromise = (async () => {
+      //   try {
+      //     const res = await api.get("/api/midtrans/pending", {
+      //       params: { _: Date.now() },
+      //     });
+      //     const data = res.data;
+      //     if (data.success) {
+      //       setPendingTransactions(data.pendingTransactions);
+      //       if (data.pendingTransactions.length > 0) {
+      //         toast.success(
+      //           `Found ${data.pendingTransactions.length} pending transaction(s).`,
+      //         );
+      //       } else {
+      //         toast.success("No pending transactions.");
+      //       }
+      //     } else throw new Error();
+      //   } catch (error) {
+      //     if (axios.isAxiosError(error)) {
+      //       toast.error("Pending transactions error: " + error.message);
+      //     } else {
+      //       toast.error("Pending transactions error");
+      //     }
+      //     isError = true;
+      //   }
+      // })();
 
-      await Promise.allSettled([formPromise, paymentPromise, pendingPromise]);
+      await Promise.allSettled([formPromise,
+        // paymentPromise, pendingPromise
+      ]);
 
       toast.dismiss();
       if (isError) {
@@ -181,21 +183,21 @@ const IzcyForms = ({
   }, [competitionName]);
 
   // Helper Functions
-  const callbacks = {
-    showError: (error: string) => {
-      toast.error(error);
-    },
-    showSuccess: (result: string) => {
-      toast.success(result);
-    },
-    showLoading: (text: string) => {
-      toast.loading(text);
-    },
-    dismissLoading: () => {
-      setIsLoading(false);
-      toast.dismiss();
-    },
-  };
+  // const callbacks = {
+  //   showError: (error: string) => {
+  //     toast.error(error);
+  //   },
+  //   showSuccess: (result: string) => {
+  //     toast.success(result);
+  //   },
+  //   showLoading: (text: string) => {
+  //     toast.loading(text);
+  //   },
+  //   dismissLoading: () => {
+  //     setIsLoading(false);
+  //     toast.dismiss();
+  //   },
+  // };
 
   const handleFileChange = (fieldName: string, file: File) => {
     setSelectedFiles((prev) => ({ ...prev, [fieldName]: [file] }));
@@ -234,11 +236,11 @@ const IzcyForms = ({
       if (!snapToken) {
         toast.success("Registration successful!", { id: toastId });
       } else {
-        initiatePayment({
-          token: snapToken,
-          snapInitialized,
-          callbacks,
-        });
+        // initiatePayment({
+        //   token: snapToken,
+        //   snapInitialized,
+        //   callbacks,
+        // });
       }
 
       reset();
@@ -292,7 +294,8 @@ const IzcyForms = ({
             onSubmit={handleSubmit(onSubmit, onInvalid)}
             className="space-y-16 flex flex-col items-center"
           >
-            {pendingTransactions.length == 0 &&
+            {
+            // pendingTransactions.length == 0 &&
               Object.entries(groupedFields).map(([section, fields]) => (
                 <RegistrationCard key={section} title={section}>
                   <div className="space-y-8">
@@ -373,64 +376,16 @@ const IzcyForms = ({
               type="submit"
               className="cursor-pointer"
               disabled={isLoading}
-              hidden={pendingTransactions.length > 0}
+              hidden={
+                false
+                // pendingTransactions.length > 0
+              }
             >
               <p className="text-putih font-semibold text-4xl">Submit</p>
             </Button>
 
             {/* Make a notification card that there's pending transaction */}
-            {pendingTransactions.length > 0 && (
-              <div className="flex flex-col items-center gap-6">
-                <div className="flex flex-col items-center">
-                  <h2 className="text-putih font-semibold text-4xl">
-                    You Have Pending Transactions
-                  </h2>
-                  <p className="text-putih font-semibold text-2xl">
-                    Please complete your payment
-                  </p>
-                </div>
-                {/* Show pending transactions */}
-                {pendingTransactions.map((tx) => (
-                  <div key={tx.order_id} className="flex gap-4">
-                    <Button
-                      variant="biruMuda"
-                      size="icon"
-                      className="cursor-pointer"
-                      disabled={isLoading}
-                      type={"button"}
-                      onClick={() =>
-                        initiatePayment({
-                          token: tx.snap_token,
-                          snapInitialized,
-                          callbacks,
-                        })
-                      }
-                    >
-                      <p className="text-putih font-semibold text-4xl">
-                        Resume Transaction
-                      </p>
-                    </Button>
-                    <Button
-                      variant="hijauHover"
-                      size="icon"
-                      className="cursor-pointer"
-                      disabled={isLoading}
-                      type={"button"}
-                      onClick={() =>
-                        cancelPayment({
-                          order_id: tx.order_id,
-                          callbacks,
-                        })
-                      }
-                    >
-                      <p className="text-putih font-semibold text-4xl">
-                        Cancel
-                      </p>
-                    </Button>
-                  </div>
-                ))}
-              </div>
-            )}
+            
           </form>
         </Form>
       </div>
