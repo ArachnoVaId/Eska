@@ -1,4 +1,4 @@
-import Logo from "@/assets/LogoEska.png";
+import Logo from "@/assets/logoeskahitam.png";
 import { Link } from "react-router-dom";
 
 import NavMenu from "./navmenu";
